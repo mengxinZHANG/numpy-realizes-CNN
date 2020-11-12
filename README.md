@@ -81,6 +81,6 @@
 
 
 
-附录：  
+## 附录：  
 https://github.com/leeroee/NN-by-Numpy  （函数接口参考）
 https://github.com/wuziheng/CNN-Numpy  （实现参考）
