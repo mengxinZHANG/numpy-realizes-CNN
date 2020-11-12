@@ -81,7 +81,8 @@
 
 ## 4、实现LeNet5
 
-   ![Alt text](/pic/LeNet5.png)
+   ![Alt text](./pic/LeNet5.png)
+   ![cat](./pic/cat.jpg)
 
 附录：  
 https://github.com/leeroee/NN-by-Numpy  （函数接口参考）  
