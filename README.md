@@ -78,3 +78,9 @@
    * 推导过程：https://zhuanlan.zhihu.com/p/67759205
    * 实现参考：https://blog.csdn.net/QLBFA/article/details/107536486
    * 说明：目前只实现了一个softmax，后续会加入：均方差损失（ESM）、交叉熵损失（Cross-entropy）
+
+
+
+附录：  
+https://github.com/leeroee/NN-by-Numpy  （函数接口参考）
+https://github.com/wuziheng/CNN-Numpy  （实现参考）
