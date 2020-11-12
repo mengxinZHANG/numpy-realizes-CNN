@@ -1,4 +1,4 @@
-# 	numpy-realizes-CNN
+# 	numpy-realizes-CNN (LeNet5)
 
 ​	这是本人的第一个github程序。适用于想要了解CNN基本组成模块的原理及实现。无论您是初学者还是已经了解BP算法，只要您没有自己动手实现过，
 那么就推荐您参考、查看。代码有详细的注释+原理链接
@@ -79,8 +79,12 @@
    * 实现参考：https://blog.csdn.net/QLBFA/article/details/107536486
    * 说明：目前只实现了一个softmax，后续会加入：均方差损失（ESM）、交叉熵损失（Cross-entropy）
 
+## 4、实现LeNet5
 
+   ![Alt text](/pic/LeNet5.png)
 
-## 附录：  
+附录：  
 https://github.com/leeroee/NN-by-Numpy  （函数接口参考）  
 https://github.com/wuziheng/CNN-Numpy  （实现参考）
+
+
