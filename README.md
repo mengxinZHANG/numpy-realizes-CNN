@@ -15,7 +15,6 @@
 
 ###  3.1 卷积
 <center>
-<img src="fig/iteration.jpg" style="zoom:60%"/>
 
 | con.py           |  使用了for循环，速度低下    |
 | :--------------- | :----------------------: | 
@@ -36,7 +35,6 @@
 
 ### 3.2 池化：pooling.py
 <center>
-<img src="fig/iteration.jpg" style="zoom:60%"/>
 
 |     pooling.py    |  **实现池化层**  |
 | :---------------: | :------------: | 
