@@ -34,7 +34,7 @@ test_images, test_labels = load_mnist("mnist_dataset", kind="t10k")
 
 batch_size = 64  # 训练时的batch size
 test_batch = 50  # 测试时的batch size
-epoch = 10
+epoch = 20
 learning_rate = 1e-5
 
 ax = []  # 保存训练过程中x轴的数据（训练次数）用于画图
@@ -73,7 +73,7 @@ for E in range(epoch):
         if (i+1)%50 == 0:
             print(time.strftime("%Y-%m-%d %H:%M:%S") +
                   "   epoch:%5d , batch:%5d , avg_batch_acc:%.4f , avg_batch_loss:%.4f , lr:%f "
-                  % (E, i+1, batch_acc/(batch_size*50), batch_loss/(batch_size*50), learning_rate))
+                  % (E+1, i+1, batch_acc/(batch_size*50), batch_loss/(batch_size*50), learning_rate))
             # 绘制loss和acc变化曲线
             plt.figure(1)
             iterations_num += 1
@@ -101,7 +101,7 @@ for E in range(epoch):
 
     print(time.strftime("%Y-%m-%d %H:%M:%S") +
           "    **********epoch:%5d , avg_epoch_acc:%.4f , avg_epoch_loss:%.4f *************"
-          % (E, epoch_acc/train_images.shape[0], epoch_loss/train_images.shape[0]))
+          % (E+1, epoch_acc/train_images.shape[0], epoch_loss/train_images.shape[0]))
     # 在test set上进行测试
     test_acc = 0
     for k in range(test_images.shape[0] // test_batch):
