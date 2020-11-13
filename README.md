@@ -87,8 +87,8 @@
 
 ## 4、实现LeNet5
 
-   ![Alt text](./pic/LeNet5.png)
-   * 注：我的网络实现时，输入的图像尺寸为（1*28*28），所以第一个卷积采用了SAME填充方式，其他结构均与原论文一致。
+   ![Alt text-w518-h158](./pic/LeNet5.png)
+   * 注：我的网络实现时，输入的图像尺寸为（1x28x28），所以第一个卷积采用了SAME填充方式，其他结构均与原论文一致。
 <center>
 
 |     net/LeNet5.py    |     实现LeNet网络结构+forward/backward    |
@@ -96,11 +96,13 @@
 |      **train.py**    |              **完成训练+测试**                |
 </center>
 
->>> 地球人都爱猫，这是大自然定的---------沃兹基硕德
-   ![cat](./pic/cat.jpg)
+  
 
-附录：  
+## 附录：  
 https://github.com/leeroee/NN-by-Numpy  （函数接口参考）  
 https://github.com/wuziheng/CNN-Numpy  （实现参考）
+
+>>> 地球人都爱猫，这是大自然定的---------沃兹基硕德
+   ![cat](./pic/cat.jpg)
 
 
