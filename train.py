@@ -35,7 +35,7 @@ test_images, test_labels = load_mnist("mnist_dataset", kind="t10k")
 batch_size = 64  # 训练时的batch size
 test_batch = 50  # 测试时的batch size
 epoch = 20
-learning_rate = 1e-5
+learning_rate = 1e-3
 
 ax = []  # 保存训练过程中x轴的数据（训练次数）用于画图
 ay_loss = []  # 保存训练过程中y轴的数据（loss）用于画图
@@ -57,9 +57,9 @@ for E in range(epoch):
     epoch_acc = 0
 
     for i in range(train_images.shape[0] // batch_size):
-        img = train_images[i*batch_size:(i+1)*batch_size].reshape(batch_size, 1, 28, 28)
+        img = train_images[i*batch_size:(i+1)*batch_size].reshape(batch_size, 1, 28, 28) / 255.0
         label = train_labels[i*batch_size:(i+1)*batch_size]
-        loss, prediction = net.forward(img, label)
+        loss, prediction = net.forward(img, label, is_train=True)   # 训练阶段
 
         epoch_loss += loss
         batch_loss += loss
@@ -105,9 +105,9 @@ for E in range(epoch):
     # 在test set上进行测试
     test_acc = 0
     for k in range(test_images.shape[0] // test_batch):
-        img = test_images[k*test_batch:(k+1)*test_batch].reshape(test_batch, 1 ,28, 28)
+        img = test_images[k*test_batch:(k+1)*test_batch].reshape(test_batch, 1 ,28, 28) / 255.0
         label = test_labels[k*test_batch:(k+1)*test_batch]
-        _, prediction = net.forward(img, label)
+        _, prediction = net.forward(img, label, is_train=False)   # 测试阶段
 
         for j in range(prediction.shape[0]):
             if np.argmax(prediction[j]) == label[j]:
