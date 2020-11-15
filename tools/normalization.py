@@ -10,7 +10,20 @@ def normalization(x):
     :param x:输入的数据维度可能是[N,C,H,W]或[N,m]
     :return: 归一化后的结果
     """
+    eps = 1e-5
     if x.ndim > 2:
-        pass
+        mean = np.mean(x, axis=(0, 2, 3))[:, np.newaxis, np.newaxis]
+        var = np.var(x, axis=(0, 2, 3))[:, np.newaxis, np.newaxis]
+        x = (x - mean) / np.sqrt(var + eps)
     else:
-        pass
+        mean = np.mean(x, axis=1)[:, np.newaxis]
+        var = np.var(x, axis=1)[:, np.newaxis] + eps
+        x = (x - mean) / np.sqrt(var)
+
+    return x
+
+if __name__ == "__main__":
+    # x = np.random.randint(5, size=(2, 5))
+    x = np.random.randint(5, size=(2,2,4,4))
+    result = normalization(x)
+    print(result)

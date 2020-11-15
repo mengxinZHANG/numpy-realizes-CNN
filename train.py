@@ -3,6 +3,7 @@ import glob
 import struct
 import time
 from net import LeNet5
+from tools import normalization
 import matplotlib.pyplot as plt
 import os
 
@@ -57,7 +58,8 @@ for E in range(epoch):
     epoch_acc = 0
 
     for i in range(train_images.shape[0] // batch_size):
-        img = train_images[i*batch_size:(i+1)*batch_size].reshape(batch_size, 1, 28, 28) / 255.0
+        img = train_images[i*batch_size:(i+1)*batch_size].reshape(batch_size, 1, 28, 28)
+        img = normalization.normalization(img)
         label = train_labels[i*batch_size:(i+1)*batch_size]
         loss, prediction = net.forward(img, label, is_train=True)   # 训练阶段
 
@@ -105,7 +107,8 @@ for E in range(epoch):
     # 在test set上进行测试
     test_acc = 0
     for k in range(test_images.shape[0] // test_batch):
-        img = test_images[k*test_batch:(k+1)*test_batch].reshape(test_batch, 1 ,28, 28) / 255.0
+        img = test_images[k*test_batch:(k+1)*test_batch].reshape(test_batch, 1 ,28, 28)
+        img = normalization.normalization(img)
         label = test_labels[k*test_batch:(k+1)*test_batch]
         _, prediction = net.forward(img, label, is_train=False)   # 测试阶段
 
