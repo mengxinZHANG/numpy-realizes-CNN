@@ -58,8 +58,6 @@ class conv():
                 self.x = self.x[:,:,:,0:self.x.shape[3]-y_fit]
 
 
-
-
         # 卷积运算实现
         N, C, H, W = self.x.shape
         output_H, output_W = (H-self.filter_size)//self.stride+1, (W-self.filter_size)//self.stride+1
@@ -76,7 +74,7 @@ class conv():
         return result
 
 
-    def backward(self, eta):
+    def backward(self,eta, lr):
         """
         :param eta:上一层返回的梯度[N,O,output_H, output_W]
         :return:本层的梯度result
@@ -84,8 +82,7 @@ class conv():
         """
 
         # 在实现卷积的反向传播中，有两点需要注意：1、当步长大于1时，上一层返回的梯度要行、列之间插0；
-        # 2、对于“VALID”填充方式，要在梯度周围添加self.filter_size-1圈零；对于“SAME”填充方式，要在梯度周围
-        # 添加self.filter_size//2 圈零
+        # 2、对于“VALID”填充方式，要在梯度周围添加self.filter_size-1圈零；对于“SAME”填充方式，要在梯度周围添加self.filter_size//2 圈零
         if self.stride>1:
             N, O, output_H, output_W = eta.shape[:]
             inserted_H, inserted_W = output_H + (self.stride-1)*(output_H-1), output_W + (self.stride-1)*(output_W-1)
@@ -93,38 +90,41 @@ class conv():
             insert_eta[:,:,::self.stride, ::self.stride] = eta[:]
             eta = insert_eta
 
+        # 本层内求导，分别对 W,b
+        N, _, H, W = eta.shape
+        self.b_grad = eta.sum(axis=(0,2,3))
+        self.W_grad = np.zeros(self.weight.data.shape)      # 形状[O, C, K, K]
+        for i in range(self.filter_size):
+            for j in range(self.filter_size):
+                self.W_grad[:,:,i,j] = np.tensordot(eta, self.x[:,:,i:i+H,j:j+W], ([0,2,3], [0,2,3]))
+        # 权重更新
+        self.weight.data -= lr * self.W_grad / N
+        self.bias.data -= lr * self.b_grad / N
+
+        # 第二步边缘填充
         if self.padding == "VALID":
             p = self.filter_size - 1
             pad_eta = np.lib.pad(eta, ((0,0),(0,0),(p,p),(p,p)), "constant", constant_values=0)
+            eta = pad_eta
         if self.padding == "SAME":
             p = self.filter_size // 2
             pad_eta = np.lib.pad(eta, ((0,0),(0,0),(p,p),(p,p)), "constant", constant_values=0)
-
+            eta = pad_eta
 
 
         # 本层梯度反向传播到上一层
         weight_flip = np.flip(self.weight.data, (2,3))  # 卷积核旋转180度
         weight_flip_swap = np.swapaxes(weight_flip, 0, 1)  # 交换输入、输出通道的顺序[C,O,H,W]
-        N, O, H, W = pad_eta.shape
+        N, O, H, W = eta.shape
         output_H, output_W = (H-self.filter_size)//self.stride+1, (W-self.filter_size)//self.stride+1
-        self.weight.grad = np.zeros((N, weight_flip_swap[0], output_H, output_W))
+        self.weight.grad = np.zeros((N, weight_flip_swap.shape[0], output_H, output_W))
 
         for n in range(N):
-            for c in range(weight_flip_swap[0]):
+            for c in range(weight_flip_swap.shape[0]):
                 for i in range(0, H-self.filter_size+1, self.stride):
                     for j in range(0, W-self.filter_size+1, self.stride):
-                        self.weight.grad[n,c,i,j] = np.sum(pad_eta[n, :, i:i+self.filter_size, j:j+self.filter_size]
+                        self.weight.grad[n,c,i,j] = np.sum(eta[n, :, i:i+self.filter_size, j:j+self.filter_size]
                                                  * weight_flip_swap[c,:,:,:])
 
-
-        # 本层内求导，分别对 W,b
-        _, _, H, W = pad_eta.shape
-        self.b_grad = pad_eta.sum(axis=(0,2,3))
-        self.W_grad = np.zeros(self.weight.data.shape)      # 形状[O, C, K, K]
-        for i in range(self.filter_size):
-            for j in range(self.filter_size):
-                self.W_grad[:,:,i,j] = np.tensordot(pad_eta, self.x[:,:,i:i+H,j:j+W], ([0,2,3], [0,2,3]))
-
-
-        return (self.b_grad, self.W_grad)
+        return self.weight.grad
 
