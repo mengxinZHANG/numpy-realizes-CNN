@@ -32,7 +32,7 @@ class fc():
         else:
             print("fc.forward的输入数据维度存在问题")
         result = np.dot(self.x, self.weight.data)
-        if self.bias==None:
+        if self.bias is not None:
             result = result + self.bias.data
         return result
 
